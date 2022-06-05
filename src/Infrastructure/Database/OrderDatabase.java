@@ -53,7 +53,7 @@ public class OrderDatabase implements IOrderRepository, IExist {
             Address orderAddress, String orderStatus, Payment orderPayment, User orderUser) {
         query = String.format(
                 "INSERT INTO order(orderID, orderDate, orderPrice, orderStatus) "
-                        + "VALUES(%s, %s, %s, %s)",
+                        + "VALUES(%s, %s, %d, %s)",
                 orderID, orderDate, orderPrice, orderStatus);
         db.executeUpdate(query);
         ad.addAddress(orderID, orderAddress.getStreet(), orderAddress.getCity(), orderAddress.getZipCode());
@@ -63,7 +63,8 @@ public class OrderDatabase implements IOrderRepository, IExist {
         pm.addPayment(orderID, orderPayment.getPaymentName(), orderPayment.getPaymentType(),
                 orderPayment.getPaymentPrice());
         for (Product product : orderProduct) {
-            query = String.format("INSERT INTO orderDetail(orderID, userID, productID)", orderID, orderUser.getUserID(),
+            query = String.format("INSERT INTO orderDetail(orderID, userID, productID)" + "VALUES(%s, %s, %s)", orderID,
+                    orderUser.getUserID(),
                     product.getProductID());
         }
 

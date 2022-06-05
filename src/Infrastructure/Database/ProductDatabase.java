@@ -67,7 +67,7 @@ public class ProductDatabase implements IProductRepository, IExist {
     public void addProduct(String productID, String productName, int productPrice, int productQuantity) {
         query = String.format(
                 "INSERT INTO product(productID, productName, productPrice, productQuantity) "
-                        + "VALUES(%s, %d, %d, %d)",
+                        + "VALUES(%s, %s, %d, %d)",
                 productID, productName, productPrice, productQuantity);
         db.executeUpdate(query);
     }

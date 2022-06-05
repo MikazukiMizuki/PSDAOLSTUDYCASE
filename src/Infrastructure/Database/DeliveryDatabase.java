@@ -17,6 +17,7 @@ public class DeliveryDatabase implements IDeliveryRepository, IExist {
     private final Connect db = Connect.getInstance();
     private String query = null;
     private OrderDatabase od = new OrderDatabase();
+    private CompanyDatabase cp = new CompanyDatabase();
 
     @Override
     public boolean isNotExist(String id) {
@@ -46,7 +47,7 @@ public class DeliveryDatabase implements IDeliveryRepository, IExist {
             Company deliveryCompany) {
         query = String.format(
                 "INSERT INTO order(deliveryID, deliveryDate, deliveryStatus) "
-                        + "VALUES(%s, %s, %s, %s)",
+                        + "VALUES(%s, %s, %s)",
                 deliveryID, deliveryDate, deliveryStatus);
         db.executeUpdate(query);
 
@@ -71,21 +72,11 @@ public class DeliveryDatabase implements IDeliveryRepository, IExist {
 
             for (Delivery delivery : deliveries) {
                 String companyQuery = String.format(
-                        "SELECT TOP(1) companyName FROM orderDetail JOIN order ON orderDetail.orderID = order.orderID");
+                        "SELECT companyID FROM orderDetail WHERE orderID = %s", delivery.getDeliveryID());
                 ResultSet companyResult = db.executeQuery(companyQuery);
                 String companyID = companyResult.getString("companyID");
-                String companyName = companyResult.getString("companyName");
-                String companyEmail = companyResult.getString("companyEmail");
-
-                String addressQuery = String.format("SELECT street, name, zipcode FROM address " + "WHERE ID = %s",
-                        companyID);
-                ResultSet addressResult = db.executeQuery(addressQuery);
-                String street = addressResult.getString("street");
-                String city = addressResult.getString("city");
-                String zipCode = addressResult.getString("zipcode");
-                Address address = new Address(street, city, zipCode);
-                Company company = new Company(companyID, companyName, address, companyEmail);
-                delivery.setDeliveryCompany(company);
+                Company deliveryCompany = cp.getCompany(companyID);
+                delivery.setDeliveryCompany(deliveryCompany);
 
                 ArrayList<Order> orders = new ArrayList<>();
                 for (Order order : delivery.getDeliveryOrder()) {
