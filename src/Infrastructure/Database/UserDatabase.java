@@ -16,7 +16,7 @@ public class UserDatabase implements IUserRepository, IExist {
     private AddressDatabase ad = new AddressDatabase();
 
     public boolean isNotExist(String id) {
-        String query = String.format(
+        query = String.format(
                 "SELECT * FROM user " +
                         "WHERE userID = %s",
                 id);
@@ -58,9 +58,9 @@ public class UserDatabase implements IUserRepository, IExist {
     public void addUser(String userID, String userName, String userEmail, String userPassword, Address userAddress,
             String userPhone) {
         query = String.format(
-                "INSERT INTO user(userID, userName, userEmail, userPassword, userAddress, userPhone) "
-                        + "VALUES(%s, %s, %s, %s, %s, %s, %s)",
-                userID, userName, userEmail, userPassword, userAddress, userPhone);
+                "INSERT INTO user(userID, userName, userEmail, userPassword, userPhone) "
+                        + "VALUES(%s, %s, %s, %s, %s)",
+                userID, userName, userEmail, userPassword, userPhone);
         db.executeUpdate(query);
         ad.addAddress(userID, userAddress.getStreet(), userAddress.getCity(), userAddress.getZipCode());
     }
@@ -85,8 +85,7 @@ public class UserDatabase implements IUserRepository, IExist {
                 String street = addressResult.getString("street");
                 String city = addressResult.getString("city");
                 String zipCode = addressResult.getString("zipcode");
-                Address address = new Address(street, city, zipCode);
-                user.setUserAddress(address);
+                user.setUserAddress(new Address(street, city, zipCode));
             }
             return users;
         } catch (SQLException e) {

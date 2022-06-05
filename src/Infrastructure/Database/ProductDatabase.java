@@ -14,7 +14,7 @@ public class ProductDatabase implements IProductRepository, IExist {
     private String query = null;
 
     public boolean isNotExist(String id) {
-        String query = String.format(
+        query = String.format(
                 "SELECT * FROM product " +
                         "WHERE productID = %s",
                 id);
@@ -35,6 +35,20 @@ public class ProductDatabase implements IProductRepository, IExist {
                 "UPDATE product "
                         + "SET productName = %s, productPrice = %d, productQuantity = %d WHERE productID = %s",
                 productName, productPrice, productQuantity, productID);
+        db.executeUpdate(query);
+        return true;
+    }
+
+    public boolean reduceQuantity(String productID, int productQuantity) {
+        if (isNotExist(productID)) {
+            return false;
+        }
+        Product product = getProduct(productID);
+
+        query = String.format(
+                "UPDATE product "
+                        + "SET productQuantity = %d WHERE productID = %s",
+                product.getProductQuantity() - productQuantity, productID);
         db.executeUpdate(query);
         return true;
     }
@@ -62,7 +76,7 @@ public class ProductDatabase implements IProductRepository, IExist {
         ArrayList<Product> products = new ArrayList<>();
         ResultSet rs = db.executeQuery(query);
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 String productID = rs.getString("productID");
                 String productName = rs.getString("productName");
                 int productPrice = rs.getInt("productPrice");
