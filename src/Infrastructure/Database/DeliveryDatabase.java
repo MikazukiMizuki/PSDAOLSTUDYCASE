@@ -16,7 +16,6 @@ import Infrastructure.Service.IExist;
 public class DeliveryDatabase implements IDeliveryRepository, IExist {
     private final Connect db = Connect.getInstance();
     private String query = null;
-    private CompanyDatabase cp = new CompanyDatabase();
     private OrderDatabase od = new OrderDatabase();
 
     @Override
