@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import Domain.ValueObject.Address;
 import Domain.ValueObject.Payment;
 
-public class Order{
+public class Order {
     private String orderID;
     private Date orderDate;
     private int orderPrice;
@@ -14,9 +14,10 @@ public class Order{
     private Address orderAddress;
     private String orderStatus;
     private Payment orderPayment;
+    private User orderUser;
 
     public Order(String orderID, Date orderDate, int orderPrice, ArrayList<Product> orderProduct, Address orderAddress,
-            String orderStatus, Payment orderPayment) {
+            String orderStatus, Payment orderPayment, User orderUser) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.orderPrice = orderPrice;
@@ -24,6 +25,7 @@ public class Order{
         this.orderAddress = orderAddress;
         this.orderStatus = orderStatus;
         this.orderPayment = orderPayment;
+        this.orderUser = orderUser;
     }
 
     public String getOrderID() {
@@ -80,6 +82,14 @@ public class Order{
 
     public void setOrderPayment(Payment orderPayment) {
         this.orderPayment = orderPayment;
+    }
+
+    public User getOrderUser() {
+        return orderUser;
+    }
+
+    public void setOrderUser(User orderUser) {
+        this.orderUser = orderUser;
     }
 
 }

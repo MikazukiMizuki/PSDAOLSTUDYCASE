@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import Domain.Entity.Order;
 import Domain.Entity.Product;
+import Domain.Entity.User;
 import Domain.ValueObject.Address;
 import Domain.ValueObject.Payment;
 import Infrastructure.Connector.Connect;
@@ -19,6 +20,7 @@ public class OrderDatabase implements IOrderRepository, IExist {
     private AddressDatabase ad = new AddressDatabase();
     private PaymentDatabase pm = new PaymentDatabase();
     private ProductDatabase pd = new ProductDatabase();
+    private UserDatabase us = new UserDatabase();
 
     @Override
     public boolean isNotExist(String id) {
@@ -48,7 +50,7 @@ public class OrderDatabase implements IOrderRepository, IExist {
 
     @Override
     public void addOrder(String orderID, Date orderDate, int orderPrice, ArrayList<Product> orderProduct,
-            Address orderAddress, String orderStatus, Payment orderPayment) {
+            Address orderAddress, String orderStatus, Payment orderPayment, User orderUser) {
         query = String.format(
                 "INSERT INTO order(orderID, orderDate, orderPrice, orderStatus) "
                         + "VALUES(%s, %s, %s, %s)",
@@ -60,6 +62,11 @@ public class OrderDatabase implements IOrderRepository, IExist {
         }
         pm.addPayment(orderID, orderPayment.getPaymentName(), orderPayment.getPaymentType(),
                 orderPayment.getPaymentPrice());
+        for (Product product : orderProduct) {
+            query = String.format("INSERT INTO orderDetail(orderID, userID, productID)", orderID, orderUser.getUserID(),
+                    product.getProductID());
+        }
+
     }
 
     private ArrayList<Order> getOrderWithQuery(String query) {
@@ -71,8 +78,8 @@ public class OrderDatabase implements IOrderRepository, IExist {
                 String orderID = rs.getString("orderID");
                 Date orderDate = rs.getDate("orderDate");
                 int orderPrice = rs.getInt("orderPrice");
-                String orderStatus = rs.getString("orderEmail");
-                orders.add(new Order(orderID, orderDate, orderPrice, null, null, orderStatus, null));
+                String orderStatus = rs.getString("orderStatus");
+                orders.add(new Order(orderID, orderDate, orderPrice, null, null, orderStatus, null, null));
             }
             for (Order order : orders) {
                 String addressQuery = String.format("SELECT street, name, zipcode FROM address " + "WHERE ID = %s",
@@ -83,13 +90,21 @@ public class OrderDatabase implements IOrderRepository, IExist {
                 String zipCode = addressResult.getString("zipcode");
                 order.setOrderAddress(new Address(street, city, zipCode));
 
-                String paymentQuery = String.format("SELECT paymentName, paymentType, paymentPrice WHERE ID = %s",
+                String paymentQuery = String.format(
+                        "SELECT paymentName, paymentType, paymentPrice FROM payment WHERE ID = %s",
                         order.getOrderID());
                 ResultSet paymentResult = db.executeQuery(paymentQuery);
                 String paymentName = paymentResult.getString("paymentName");
                 String paymentType = paymentResult.getString("paymentType");
                 int paymentPrice = paymentResult.getInt("paymentPrice");
                 order.setOrderPayment(new Payment(paymentName, paymentType, paymentPrice));
+
+                String userQuery = String.format("SELECT userID FROM orderDetail WHERE orderID = %s",
+                        order.getOrderID());
+                ResultSet userResult = db.executeQuery(userQuery);
+                String userID = userResult.getString("userID");
+                User orderUser = us.getUser(userID);
+                order.setOrderUser(orderUser);
 
                 ArrayList<Product> products = new ArrayList<>();
                 for (Product product : order.getOrderProduct()) {

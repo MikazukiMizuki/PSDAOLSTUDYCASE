@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import Domain.Entity.Order;
 import Domain.Entity.Product;
+import Domain.Entity.User;
 import Domain.ValueObject.Address;
 import Domain.ValueObject.Payment;
 import Infrastructure.Interface.IOrderRepository;
@@ -29,9 +30,9 @@ public class OrderRepository implements IOrderRepository {
 
     @Override
     public void addOrder(String orderID, Date orderDate, int orderPrice, ArrayList<Product> orderProduct,
-            Address orderAddress, String orderStatus, Payment orderPayment) {
+            Address orderAddress, String orderStatus, Payment orderPayment, User orderUser) {
         resetQuery();
-        shopediaDB.addOrder(orderID, orderDate, orderPrice, orderProduct, orderAddress, orderStatus, orderPayment);
+        shopediaDB.addOrder(orderID, orderDate, orderPrice, orderProduct, orderAddress, orderStatus, orderPayment, orderUser);
     }
 
     @Override
