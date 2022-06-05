@@ -26,11 +26,14 @@ public class Order implements IGenerateID {
         this.orderAddress = orderAddress;
         this.orderStatus = orderStatus;
         this.orderPayment = orderPayment;
-        generateID();
     }
 
     public String getOrderID() {
         return orderID;
+    }
+
+    public void setOrderID(String orderID) {
+        this.orderID = orderID;
     }
 
     public void generateID() {

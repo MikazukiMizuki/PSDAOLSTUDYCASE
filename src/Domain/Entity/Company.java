@@ -3,23 +3,27 @@ package Domain.Entity;
 import java.util.UUID;
 
 import Domain.Service.IGenerateID;
+import Domain.ValueObject.Address;
 
 public class Company implements IGenerateID {
     private String companyID;
     private String companyName;
-    private String companyAddress;
+    private Address companyAddress;
     private String companyEmail;
 
-    public Company(String companyID, String companyName, String companyAddress, String companyEmail) {
+    public Company(String companyID, String companyName, Address companyAddress, String companyEmail) {
         this.companyID = companyID;
         this.companyName = companyName;
         this.companyAddress = companyAddress;
         this.companyEmail = companyEmail;
-        generateID();
     }
 
     public String getCompanyID() {
         return companyID;
+    }
+    
+    public void setCompanyID(String companyID) {
+        this.companyID = companyID;
     }
 
     public void generateID() {
@@ -36,11 +40,11 @@ public class Company implements IGenerateID {
         this.companyName = companyName;
     }
 
-    public String getCompanyAddress() {
+    public Address getCompanyAddress() {
         return companyAddress;
     }
 
-    public void setCompanyAddress(String companyAddress) {
+    public void setCompanyAddress(Address companyAddress) {
         this.companyAddress = companyAddress;
     }
 

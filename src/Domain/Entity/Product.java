@@ -15,11 +15,14 @@ public class Product implements IGenerateID {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
-        generateID();
     }
 
     public String getProductID() {
         return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
     }
 
     public void generateID() {

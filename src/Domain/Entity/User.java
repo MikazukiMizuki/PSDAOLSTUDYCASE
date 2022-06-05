@@ -21,11 +21,14 @@ public class User implements IGenerateID {
         this.userPassword = userPassword;
         this.userAddress = userAddress;
         this.userPhone = userPhone;
-        generateID();
     }
 
     public String getUserID() {
         return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public void generateID() {

@@ -20,11 +20,14 @@ public class Delivery implements IGenerateID {
         this.deliveryOrder = deliveryOrder;
         this.deliveryStatus = deliveryStatus;
         this.deliveryCompany = deliveryCompany;
-        generateID();
     }
 
     public String getDeliveryID() {
         return deliveryID;
+    }
+
+    public void setDeliveryID(String deliveryID) {
+        this.deliveryID = deliveryID;
     }
 
     public void generateID() {
