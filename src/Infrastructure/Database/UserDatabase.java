@@ -12,11 +12,12 @@ import Infrastructure.Interface.IUserRepository;
 public class UserDatabase implements IUserRepository {
     private final Connect db = Connect.getInstance();
     private String query = null;
+    private AddressDatabase ad = new AddressDatabase();
 
     private boolean isNotExist(String id) {
         String query = String.format(
                 "SELECT * FROM user " +
-                        "WHERE userID = %d",
+                        "WHERE userID = %s",
                 id);
         try (ResultSet result = db.executeQuery(query)) {
             return !result.next();
@@ -37,14 +38,8 @@ public class UserDatabase implements IUserRepository {
                         + "SET userName = %s, userEmail = %s, userPassword = %s, userPhone = %s WHERE userID = %s",
                 userName, userEmail, userPassword, userPhone, userID);
         db.executeUpdate(query);
-        editAddress(userID, userAddress.getStreet(), userAddress.getCity(), userAddress.getZipCode());
+        ad.editAddress(userID, userAddress.getStreet(), userAddress.getCity(), userAddress.getZipCode());
         return true;
-    }
-
-    private void editAddress(String userID, String street, String city, String zipCode) {
-        query = String.format("UPDATE address " + "SET street = %s, city = %s, zipcode = %s WHERE ID = %s", street,
-                city, zipCode, userID);
-        db.executeUpdate(query);
     }
 
     @Override
@@ -54,13 +49,8 @@ public class UserDatabase implements IUserRepository {
         }
         query = String.format("DELETE FROM user " + "WHERE userID = %s", userID);
         db.executeUpdate(query);
-        deleteAddress(userID);
+        ad.deleteAddress(userID);
         return true;
-    }
-
-    private void deleteAddress(String userID) {
-        query = String.format("DELETE from address " + "WHERE ID = %s", userID);
-        db.executeQuery(query);
     }
 
     @Override
@@ -71,13 +61,7 @@ public class UserDatabase implements IUserRepository {
                         + "VALUES(%s, %s, %s, %s, %s, %s, %s)",
                 userID, userName, userEmail, userPassword, userAddress, userPhone);
         db.executeUpdate(query);
-        addAddress(userID, userAddress.getStreet(), userAddress.getCity(), userAddress.getZipCode());
-    }
-
-    public void addAddress(String userID, String street, String city, String zipCode) {
-        query = String.format("INSERT INTO address(ID, street, city, zipcode) " + "VALUES(%s, %s, %s %s)", userID,
-                street, city, zipCode);
-        db.executeUpdate(query);
+        ad.addAddress(userID, userAddress.getStreet(), userAddress.getCity(), userAddress.getZipCode());
     }
 
     private ArrayList<User> getUserWithQuery(String query) {
