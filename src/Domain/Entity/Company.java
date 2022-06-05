@@ -21,12 +21,15 @@ public class Company implements IGenerateID {
     public String getCompanyID() {
         return companyID;
     }
-    
+
     public void setCompanyID(String companyID) {
         this.companyID = companyID;
     }
 
     public void generateID() {
+        if (companyID != null) {
+            return;
+        }
         UUID uuid = UUID.randomUUID();
         String idTemp = "CO" + uuid.toString();
         this.companyID = idTemp;

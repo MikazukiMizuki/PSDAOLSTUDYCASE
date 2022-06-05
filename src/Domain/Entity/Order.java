@@ -37,6 +37,9 @@ public class Order implements IGenerateID {
     }
 
     public void generateID() {
+        if (orderID != null) {
+            return;
+        }
         UUID uuid = UUID.randomUUID();
         String idTemp = "OR" + uuid.toString();
         this.orderID = idTemp;

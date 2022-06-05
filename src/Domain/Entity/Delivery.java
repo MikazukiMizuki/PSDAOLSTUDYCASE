@@ -31,6 +31,9 @@ public class Delivery implements IGenerateID {
     }
 
     public void generateID() {
+        if (deliveryID != null) {
+            return;
+        }
         UUID uuid = UUID.randomUUID();
         String idTemp = "DE" + uuid.toString();
         this.deliveryID = idTemp;

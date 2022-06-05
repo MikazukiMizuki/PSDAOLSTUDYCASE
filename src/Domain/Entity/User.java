@@ -32,6 +32,9 @@ public class User implements IGenerateID {
     }
 
     public void generateID() {
+        if (userID != null) {
+            return;
+        }
         UUID uuid = UUID.randomUUID();
         String idTemp = "US" + uuid.toString();
         this.userID = idTemp;

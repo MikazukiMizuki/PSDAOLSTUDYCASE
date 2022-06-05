@@ -26,6 +26,9 @@ public class Product implements IGenerateID {
     }
 
     public void generateID() {
+        if (productID != null) {
+            return;
+        }
         UUID uuid = UUID.randomUUID();
         String idTemp = "PR" + uuid.toString();
         this.productID = idTemp;
