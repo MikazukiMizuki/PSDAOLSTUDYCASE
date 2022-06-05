@@ -8,13 +8,14 @@ import Domain.Entity.User;
 import Domain.ValueObject.Address;
 import Infrastructure.Connector.Connect;
 import Infrastructure.Interface.IUserRepository;
+import Infrastructure.Service.IExist;
 
-public class UserDatabase implements IUserRepository {
+public class UserDatabase implements IUserRepository, IExist {
     private final Connect db = Connect.getInstance();
     private String query = null;
     private AddressDatabase ad = new AddressDatabase();
 
-    private boolean isNotExist(String id) {
+    public boolean isNotExist(String id) {
         String query = String.format(
                 "SELECT * FROM user " +
                         "WHERE userID = %s",

@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import Domain.Entity.Product;
 import Infrastructure.Connector.Connect;
 import Infrastructure.Interface.IProductRepository;
+import Infrastructure.Service.IExist;
 
-public class ProductDatabase implements IProductRepository {
+public class ProductDatabase implements IProductRepository, IExist {
     private final Connect db = Connect.getInstance();
     private String query = null;
 
-    private boolean isNotExist(String id) {
+    public boolean isNotExist(String id) {
         String query = String.format(
                 "SELECT * FROM product " +
                         "WHERE productID = %s",
