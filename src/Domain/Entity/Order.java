@@ -2,13 +2,11 @@ package Domain.Entity;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.UUID;
 
-import Domain.Service.IGenerateID;
 import Domain.ValueObject.Address;
 import Domain.ValueObject.Payment;
 
-public class Order implements IGenerateID {
+public class Order{
     private String orderID;
     private Date orderDate;
     private int orderPrice;
@@ -34,15 +32,6 @@ public class Order implements IGenerateID {
 
     public void setOrderID(String orderID) {
         this.orderID = orderID;
-    }
-
-    public void generateID() {
-        if (orderID != null) {
-            return;
-        }
-        UUID uuid = UUID.randomUUID();
-        String idTemp = "OR" + uuid.toString();
-        this.orderID = idTemp;
     }
 
     public Date getOrderDate() {

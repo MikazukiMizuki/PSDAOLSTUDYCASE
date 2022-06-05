@@ -1,10 +1,6 @@
 package Domain.Entity;
 
-import java.util.UUID;
-
-import Domain.Service.IGenerateID;
-
-public class Product implements IGenerateID {
+public class Product {
     private String productID;
     private String productName;
     private int productPrice;
@@ -23,15 +19,6 @@ public class Product implements IGenerateID {
 
     public void setProductID(String productID) {
         this.productID = productID;
-    }
-
-    public void generateID() {
-        if (productID != null) {
-            return;
-        }
-        UUID uuid = UUID.randomUUID();
-        String idTemp = "PR" + uuid.toString();
-        this.productID = idTemp;
     }
 
     public String getProductName() {

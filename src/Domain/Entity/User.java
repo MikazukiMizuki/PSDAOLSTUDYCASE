@@ -1,11 +1,8 @@
 package Domain.Entity;
 
-import java.util.UUID;
-
-import Domain.Service.IGenerateID;
 import Domain.ValueObject.Address;
 
-public class User implements IGenerateID {
+public class User {
     private String userID;
     private String userName;
     private String userEmail;
@@ -29,15 +26,6 @@ public class User implements IGenerateID {
 
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-
-    public void generateID() {
-        if (userID != null) {
-            return;
-        }
-        UUID uuid = UUID.randomUUID();
-        String idTemp = "US" + uuid.toString();
-        this.userID = idTemp;
     }
 
     public String getUserName() {

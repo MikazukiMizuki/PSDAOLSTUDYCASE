@@ -2,11 +2,8 @@ package Domain.Entity;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.UUID;
 
-import Domain.Service.IGenerateID;
-
-public class Delivery implements IGenerateID {
+public class Delivery{
     private String deliveryID;
     private Date deliveryDate;
     private ArrayList<Order> deliveryOrder;
@@ -28,15 +25,6 @@ public class Delivery implements IGenerateID {
 
     public void setDeliveryID(String deliveryID) {
         this.deliveryID = deliveryID;
-    }
-
-    public void generateID() {
-        if (deliveryID != null) {
-            return;
-        }
-        UUID uuid = UUID.randomUUID();
-        String idTemp = "DE" + uuid.toString();
-        this.deliveryID = idTemp;
     }
 
     public Date getDeliveryDate() {
