@@ -6,8 +6,11 @@ import Domain.Entity.Product;
 import Domain.Service.IGenerateID;
 
 public class ProductFactory implements IGenerateID {
-    public Product createProduct(String productName, int productPrice, int productQuantity) {
-        String productID = generateID();
+    public Product createProduct(String productID, String productName, int productPrice, int productQuantity) {
+        if (productID == null) {
+            productID = generateID();
+        }
+
         return new Product(productID, productName, productPrice, productQuantity);
     }
 

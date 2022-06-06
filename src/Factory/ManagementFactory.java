@@ -8,11 +8,25 @@ import Domain.Entity.User;
 import Domain.Service.IGenerateID;
 
 public class ManagementFactory implements IGenerateID {
-    public Management createManagement(String managementDesc,
-            User managementUser,
-            Product managementProduct,
+    UserFactory userFactory = new UserFactory();
+    ProductFactory productFactory = new ProductFactory();
+
+    public Management createManagement(String managementID, String managementDesc,
+            String userID, String userName, String userEmail, String userPassword, String street,
+            String city,
+            String zipCode,
+            String userPhone,
+            String productID, String productName, int productPrice, int productQuantity,
             String managementStatus) {
-        String managementID = generateID();
+        if (managementID == null) {
+            managementID = generateID();
+        }
+        User managementUser = userFactory.createUser(userID, userName, userEmail, userPassword, street, city, zipCode,
+                userPhone);
+
+        Product managementProduct = productFactory.createProduct(productID, productName, productPrice,
+                productQuantity);
+
         return new Management(managementID, managementDesc, managementUser, managementProduct, managementStatus);
     }
 

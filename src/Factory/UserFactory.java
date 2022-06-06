@@ -9,10 +9,14 @@ import Domain.ValueObject.Address;
 public class UserFactory implements IGenerateID {
     AddressFactory addressFactory = new AddressFactory();
 
-    public User createUser(String userName, String userEmail, String userPassword, String street, String city,
+    public User createUser(String userID, String userName, String userEmail, String userPassword, String street,
+            String city,
             String zipCode,
             String userPhone) {
-        String userID = generateID();
+        if (userID == null) {
+            userID = generateID();
+        }
+
         Address userAddress = addressFactory.createAddress(street, city, zipCode);
         return new User(userID, userName, userEmail, userPassword, userAddress, userPhone);
     }
