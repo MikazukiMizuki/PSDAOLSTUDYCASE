@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Application.Interface.IManagementRepository;
+import Application.Interfaces.IManagementRepository;
 import Domain.Entity.Management;
 import Domain.Entity.Product;
 import Domain.Entity.User;

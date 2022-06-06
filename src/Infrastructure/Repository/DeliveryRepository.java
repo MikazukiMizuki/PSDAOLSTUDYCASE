@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Application.Interface.IDeliveryRepository;
+import Application.Interfaces.IDeliveryRepository;
 import Domain.Entity.Company;
 import Domain.Entity.Delivery;
 import Domain.Entity.Order;

@@ -68,4 +68,9 @@ public class User {
         this.userPhone = userPhone;
     }
 
+    public void userChangedAddress(Boolean checker) {
+        if(checker){
+            
+        }
+    }
 }

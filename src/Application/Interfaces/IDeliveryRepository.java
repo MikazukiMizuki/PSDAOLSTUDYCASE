@@ -1,4 +1,4 @@
-package Application.Interface;
+package Application.Interfaces;
 
 import java.sql.Date;
 import java.util.ArrayList;

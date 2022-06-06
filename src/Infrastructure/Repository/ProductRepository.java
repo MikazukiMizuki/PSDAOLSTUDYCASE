@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Application.Interface.IProductRepository;
+import Application.Interfaces.IProductRepository;
 import Domain.Entity.Product;
 import Infrastructure.Connector.Connect;
 import Infrastructure.Service.IExist;
