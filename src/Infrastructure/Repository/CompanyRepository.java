@@ -1,63 +1,107 @@
 package Infrastructure.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import Application.Interface.ICompanyRepository;
 import Domain.Entity.Company;
 import Domain.ValueObject.Address;
-import Infrastructure.Interface.ICompanyRepository;
+import Infrastructure.Connector.Connect;
+import Infrastructure.Service.IExist;
 
-public class CompanyRepository implements ICompanyRepository {
-    private ICompanyRepository shopediaDB;
-    private ArrayList<Company> companies = null;
+public class CompanyRepository implements ICompanyRepository, IExist {
+    private final Connect db = Connect.getInstance();
     private String query = null;
-    private Company company = null;
+    private AddressRepository ad = new AddressRepository();
 
-    private void resetQuery() {
-        companies = null;
-        query = null;
-        company = null;
+    public boolean isNotExist(String id) {
+        String query = String.format(
+                "SELECT * FROM company " +
+                        "WHERE companyID = %s",
+                id);
+        try (ResultSet result = db.executeQuery(query)) {
+            return !result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     @Override
     public boolean updateCompany(String companyID, String companyName, Address companyAddress, String companyEmail) {
-        resetQuery();
-        return shopediaDB.updateCompany(companyID, companyName, companyAddress, companyEmail);
+        if (isNotExist(companyID)) {
+            return false;
+        }
+        query = String.format(
+                "UPDATE company "
+                        + "SET companyName = %s, companyEmail = %s WHERE companyID = %s",
+                companyName, companyEmail, companyID);
+        db.executeUpdate(query);
+        ad.editAddress(companyID, companyAddress.getStreet(), companyAddress.getCity(), companyAddress.getZipCode());
+        return true;
     }
 
     @Override
     public boolean deleteCompany(String companyID) {
-        resetQuery();
-        return shopediaDB.deleteCompany(companyID);
+        if (isNotExist(companyID)) {
+            return false;
+        }
+        query = String.format("DELETE FROM company " + "WHERE companyID = %s", companyID);
+        db.executeUpdate(query);
+        ad.deleteAddress(companyID);
+        return true;
     }
 
     @Override
     public void addCompany(String companyID, String companyName, Address companyAddress, String companyEmail) {
-        resetQuery();
-        shopediaDB.addCompany(companyID, companyName, companyAddress, companyEmail);
+        query = String.format(
+                "INSERT INTO company(companyID, companyName, companyEmail) "
+                        + "VALUES(%s, %s, %s)",
+                companyID, companyName, companyEmail);
+        db.executeUpdate(query);
+        ad.addAddress(companyID, companyAddress.getStreet(), companyAddress.getCity(), companyAddress.getZipCode());
+    }
+
+    private ArrayList<Company> getCompanyWithQuery(String query) {
+        ArrayList<Company> companies = new ArrayList<>();
+        ResultSet rs = db.executeQuery(query);
+
+        try {
+            while (rs.next()) {
+                String companyID = rs.getString("companyID");
+                String companyName = rs.getString("companyName");
+                String companyEmail = rs.getString("companyEmail");
+                companies.add(new Company(companyID, companyName, null, companyEmail));
+            }
+            for (Company company : companies) {
+                String addressQuery = String.format("SELECT street, name, zipcode FROM address " + "WHERE ID = %s",
+                        company.getCompanyID());
+                ResultSet addressResult = db.executeQuery(addressQuery);
+                String street = addressResult.getString("street");
+                String city = addressResult.getString("city");
+                String zipCode = addressResult.getString("zipcode");
+                Address address = new Address(street, city, zipCode);
+                company.setCompanyAddress(address);
+            }
+            return companies;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public ArrayList<Company> getAllCompany() {
-        if (companies == null || query != null) {
-            resetQuery();
-            companies = shopediaDB.getAllCompany();
-            if (companies == null) {
-                return new ArrayList<>();
-            }
-        }
-        return companies;
+        String query = String.format("SELECT * FROM company");
+        return getCompanyWithQuery(query);
     }
 
     @Override
     public Company getCompany(String companyID) {
-        if (company == null || query != null) {
-            resetQuery();
-            company = shopediaDB.getCompany(companyID);
-            if (company == null) {
-                return null;
-            }
-        }
-        return company;
+        String query = String.format("SELECT * FROM company " + "WHERE companyID = %s", companyID);
+        ArrayList<Company> companies = getCompanyWithQuery(query);
+        return companies.get(0);
     }
 
 }

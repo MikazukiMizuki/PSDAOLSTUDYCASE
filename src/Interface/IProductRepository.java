@@ -1,4 +1,4 @@
-package Infrastructure.Interface;
+package Interface;
 
 import java.util.ArrayList;
 

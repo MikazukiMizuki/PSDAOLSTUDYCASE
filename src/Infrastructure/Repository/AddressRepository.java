@@ -1,8 +1,8 @@
-package Infrastructure.Database;
+package Infrastructure.Repository;
 
 import Infrastructure.Connector.Connect;
 
-public class AddressDatabase {
+public class AddressRepository {
     private final Connect db = Connect.getInstance();
     private String query = null;
 
