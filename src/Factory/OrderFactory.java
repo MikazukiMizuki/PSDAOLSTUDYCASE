@@ -12,9 +12,16 @@ import Domain.ValueObject.Address;
 import Domain.ValueObject.Payment;
 
 public class OrderFactory implements IGenerateID {
-    public Order createOrder(Date orderDate, int orderPrice, ArrayList<Product> orderProduct, Address orderAddress,
-            String orderStatus, Payment orderPayment, User orderUser) {
+    AddressFactory addressFactory = new AddressFactory();
+    PaymentFactory paymentFactory = new PaymentFactory();
+
+    public Order createOrder(Date orderDate, int orderPrice, ArrayList<Product> orderProduct, String street,
+            String city,
+            String zipCode,
+            String orderStatus, String paymentName, String paymentType, int paymentPrice, User orderUser) {
         String orderID = generateID();
+        Address orderAddress = new Address(street, city, zipCode);
+        Payment orderPayment = new Payment(paymentName, paymentType, paymentPrice);
         return new Order(orderID, orderDate, orderPrice, orderProduct, orderAddress, orderStatus, orderPayment,
                 orderUser);
     }

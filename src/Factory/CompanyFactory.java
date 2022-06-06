@@ -7,8 +7,11 @@ import Domain.Service.IGenerateID;
 import Domain.ValueObject.Address;
 
 public class CompanyFactory implements IGenerateID {
-    public Company createCompany(String companyName, Address companyAddress, String companyEmail) {
+    AddressFactory addressFactory = new AddressFactory();
+
+    public Company createCompany(String companyName, String street, String city, String zipCode, String companyEmail) {
         String companyID = generateID();
+        Address companyAddress = addressFactory.createAddress(street, city, zipCode);
         return new Company(companyID, companyName, companyAddress, companyEmail);
     }
 
